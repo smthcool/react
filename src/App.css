@@ -1,35 +1,231 @@
-/*Основные стили */
-
+/* Основные стили */
 body {
-  font-family:  Arial, Helvetica, sans-serif;
-  line-height: 1.6;
+  font-family: Arial, sans-serif;
   margin: 0;
-  padding: 20px;
-  background-color: darkcyan;
+  padding: 0;
+  background-color: #f5f5f5;
+  color: #333;
 }
 
 .app {
-  max-width: 800;
+  max-width: 1200px;
   margin: 0 auto;
   background: white;
-  padding: 20px;
-  border-radius: 8px;
+  min-height: 100vh;
 }
 
-section {
-  margin-bottom: 40px;
-  padding: 20px;
-  border: 1px solid #eee;
-  border-radius: 8px;
+/* Навигационное меню */
+.nav-menu {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: #2c3e50;
+  color: white;
 }
 
-/*стили для выпадающего меню*/
-.dropdown {
+.nav-logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.nav-items {
+  display: flex;
+  gap: 2rem;
+}
+
+.nav-item {
   position: relative;
-  display: inline-block;
+  cursor: pointer;
+  padding: 0.5rem 0;
 }
 
-.dropdown-button {
-  background: #4CAF50;
+.nav-item:hover {
+  color: #3498db;
 }
 
+.nav-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+
+.search-button, .cart-button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.cart-count {
+  background: #e74c3c;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+}
+
+/* Выпадающее меню категорий */
+.categories-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: white;
+  color: #333;
+  width: 200px;
+  border-radius: 4px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  z-index: 100;
+  padding: 0.5rem 0;
+}
+
+.category-item {
+  padding: 0.5rem 1rem;
+  position: relative;
+}
+
+.category-item:hover {
+  background: #f1f1f1;
+}
+
+.subcategories {
+  position: absolute;
+  left: 100%;
+  top: 0;
+  background: white;
+  width: 200px;
+  border-radius: 0 4px 4px 0;
+  box-shadow: 5px 0 15px rgba(0,0,0,0.1);
+  padding: 0.5rem 0;
+}
+
+.subcategory-item {
+  padding: 0.5rem 1rem;
+}
+
+.main-content {
+  padding: 0.5rem 1rem;
+}
+.subcategory-item:hover {
+  background: #f1f1f1;
+}
+
+/* Герой-секция */
+.hero {
+  background: linear-gradient(135deg, #3498db, #2c3e50);
+  color: white;
+  padding: 4rem 2rem;
+  margin-bottom: 2rem;
+}
+
+.hero-content {
+  max-width: 600px;
+}
+
+.hero h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.cta-button {
+  background: #e74c3c;
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 1rem;
+}
+
+/* Галерея товаров */
+.product-gallery {
+  padding: 2rem;
+}
+
+.product-gallery h2 {
+  margin-bottom: 2rem;
+  font-size: 1.8rem;
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 2rem;
+}
+
+.product-card {
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+}
+
+.product-image {
+  position: relative;
+  height: 200px;
+  overflow: hidden;
+}
+
+.product-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.quick-view {
+  position: absolute;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0,0,0,0.7);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.product-info {
+  padding: 1rem;
+}
+
+.product-rating {
+  margin: 0.5rem 0;
+}
+
+.product-price {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin: 0.5rem 0;
+}
+
+.add-to-cart {
+  width: 100%;
+  background: #2c3e50;
+  color: white;
+  border: none;
+  padding: 0.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Футер */
+.footer {
+  text-align: center;
+  padding: 2rem;
+  background: #2c3e50;
+  color: white;
+  margin-top: 2rem;
+}

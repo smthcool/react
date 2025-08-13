@@ -1,141 +1,108 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import React, {useState} from 'react';
-import { FaChevronUp, FaChevronDown, FaArrowRight } from 'react-icons/fa';
+import { FaChevronUp, FaChevronDown, FaArrowRight, FaSearch } from 'react-icons/fa';
+import { BrowserRouter as Router, Routes, Link, useLocation, Route  } from 'react-router-dom';
 import './App.css'
 //Анимированное выпадающее меню
 
-const DropdownMenu = () => {
+const NavMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [hoveredItem, setHoveredItem] = useState(null);
+
+  const categories = [
+    {name: 'Электроника', items: ['Смартфоны', 'Ноутбуки', 'Телевизоры']},
+    {name: 'Одежда', items: ['Мужская', 'Женская', 'Детская']}
+  ]
 
   return (
-    <div className="dropdown">
-      <button
-        onClick={
-          () => setIsOpen(!isOpen)
-        }
-        className="dropdown-button">
-        Меню {isOpen ? <FaChevronUp /> : <FaChevronDown />}
-        </button>
-
-        <AnimatePresence>
-          {isOpen && (
-            <motion.div
+  <nav className='nav-items'>
+    <div
+      className="nav-item"
+      onMouseEnter={() => setIsOpen(true)}
+      onMouseLeave={() => setIsOpen(false)}
+    >
+      <span>Категории <FaChevronDown size={12} /></span>
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div 
+            className="categories-dropdown"
             initial={{ y: -20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: -20, opacity: 0 }}
-            className="dropdown-content"
-            >
-              <a href="#">Главная</a>
-              <a href="#">О нас</a>
-              <a href="#">Контакты</a>
-            </motion.div>
-          )}
-        </AnimatePresence>
+          >
+            {categories.map((category, index) => (
+              <div
+                key={index}
+                className="category-item"
+                onMouseEnter={() => setHoveredItem(index)}
+                onMouseLeave={() => setHoveredItem(null)}
+              >
+                {category.name}
+                {hoveredItem === index && (
+                  <motion.div
+                    className="subcategories"
+                    initial={{ y: -20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    exit={{ y: -20, opacity: 0 }}
+                  >
+                    {category.items.map((item, i) => (
+                      <div key={i} className="subcategory-item">
+                        {item}
+                      </div>
+                    ))}
+                  </motion.div>
+                )}
+              </div>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
-  );
-};
+    <Link to ="/catalog"
+    className="nav-item">Каталог</Link>
+    <Link to ="/about"
+    className="nav-item">О нас</Link>
 
-const AnimatedList = () => {
-  const items = ['Первый элемент', 'Второй элемент', 'Третий элемент'];
-  return (
-    <ul className='animated-list'>
-      {items.map((item, index) => (
-        <motion.li
-        key={index}
-        initial={{ x: -20, opacity: 0 }}
-        animate={{ x: 0, opacity: 1 }}
-        transition={{ delay: index*0.1, duration: 0.5 }}
-      >
-        {item}
-        </motion.li>
-      ))}
-    </ul>
-  );
-};
-
-const AnimatedButton = () => {
-  const [isHovered, setIsHovered] = useState(false);
-
-  return (
-    <motion.button
-    className='animated-button'
-    whileHover={{scale: 1.2}}
-    whileTap={{scale: 0.8}}
-    onHoverStart={()=>setIsHovered(true)}
-    onHoverEnd={()=>setIsHovered(false)}
-    >
-      {isHovered ? 'Кликните на меня!':'Наведите на меня'}
-      {isHovered && (
-        <motion.span
-        initial={{x:-100, opacity: 0}}
-        animate={{x:500, opacity:1}}
-        transition={{delay:1}}
-        >
-          <FaArrowRight />
-          </motion.span>
-      )}
-    </motion.button>
-  );
-};
-
-const SimpleGallery = () => {
-  const images = ['https://storage.yandexcloud.net/incrussia-prod/wp-content/uploads/2025/08/logotip-kompanii-apple.webp',
-    'https://www.iphones.ru/wp-content/uploads/2025/08/ultra-2-prime-day.jpeg'
-  ]
-
-    const [currentIndex, setCurrentIndex] = useState(0);
-    const nextImage = () => {
-      setCurrentIndex((prev) => (prev == 0 ? images.length -1 : prev-1));
-  }
-  const prevImage = () => {
-      setCurrentIndex((prev) => (prev == 0 ? images.length -1 : prev-1));
-  }
-
-return (
-  <div className = "gallery">
-    <div className="gallery-nav">
-      <button onClick={prevImage}>FaArrowLeft
-      </button>
-      <button onClick={nextImage}>FaArrowRight
+    <div className="nav-actions">
+      <button className="search-button">
+        <FaSearch/>
+        </button>
+        <button className="cart-button">
+        <FaSearch/>
       </button>
     </div>
-    <AnimatePresence mode="wait">
-      <motion.img
-      key={currentIndex}
-      src={images[currentIndex]}
-      alt="Gallery item"
-      initial={{opacity: 0}}
-      animate={{opacity: 1}}
-      exit={{opacity: 0}}
-      transition={{duration: 0.5}}
-      />
-    </AnimatePresence>
-  </div>
-);
+  </nav>
+)
+}
+
+const CatalogPage = () => {
+  return (
+    <main className="main-content">
+    <h1 className = "page-title">Каталог товаров</h1>
+    </main>
+  )
+}
+
+const RoutesWithAnimation = () => {
+  const location = useLocation();
+  return (
+    <Routes location={location}
+    key = {location.pathname}>
+    <Route path="/catalog" element ={<CatalogPage/>}  />
+    </Routes>
+  );
 };
 
 const App = () => {
   return (
-    <div className="app">
-      <h1>Демонстрация возможностей React</h1>
-      <section>
-        <h2>Анимированное выпадающее меню</h2>
-        <DropdownMenu />
-      </section>
-      <section>
-        <h2>Список с анимацией</h2>
-        <AnimatedList/>
-      </section>
-      <section>
-        <h2>Кнопка с анимацией</h2>
-        <AnimatedButton/>
-      </section>
-      <section>
-        <h2>Простая галерея</h2>
-        <SimpleGallery/>
-      </section>
-
-    </div>
+    <Router>
+      <div className="app">
+        <NavMenu />
+        <AnimatePresence mode="wait">
+          <RoutesWithAnimation/>
+        </AnimatePresence>
+      </div>
+      </Router>
   )
 }
 
