@@ -225,3 +225,22 @@ body {
   color: white;
   margin-top: 2rem;
 }
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 40px;
+  gap: 8px;
+}
+
+.pagination-button {
+   display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  border: 2px solid slategrey;
+  background: white;
+  border-radius: 8px;
+}

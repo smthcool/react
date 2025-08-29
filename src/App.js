@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import React, {useState} from 'react';
-import { FaChevronUp, FaChevronDown, FaArrowRight, FaSearch, FaShoppingCart, FaStar } from 'react-icons/fa';
+import { FaChevronUp, FaChevronDown, FaArrowRight, FaSearch, FaShoppingCart, FaStar, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import { BrowserRouter as Router, Routes, Link, useLocation, Route  } from 'react-router-dom';
 import './App.css'
 //Анимированное выпадающее меню
@@ -14,7 +14,7 @@ const App = () => {
         <AnimatePresence mode="wait">
           <RoutesWithAnimation />
         </AnimatePresence>
-        
+        <ProductGalleryWithPagination/>
       </div>
     </Router>
   );
@@ -206,6 +206,138 @@ const RoutesWithAnimation = () => {
     <Route path="/" element={<HomePage/>}/>
     <Route path="/product/:id" element={<ProductDetailPage/>}/>
     </Routes>
+  );
+};
+
+const ProductGalleryWithPagination = () => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const productsPerPage = 3;
+
+  const products = [
+    {id: 1,
+    name: "Смартфон 1",
+    price: "50000",
+    rating: 5,
+    description: "Это просто описание смартфона",
+    image: "https://c.dns-shop.ru/thumb/st1/fit/500/500/c61450e8925f55042ebd96993cd543e0/9286da569d27aabbc02281390acc90a90d1e3a3ae90d90f58510810c9e6870b3.jpg.webp"
+    },
+    {id: 2,
+    name: "Смартфон 2",
+    price: "150000",
+    rating: 3,
+    description: "Это просто описание смартфона с номером 2",
+    image: "https://c.dns-shop.ru/thumb/st1/fit/500/500/0765718a0de075eeb7b70e870b0a4287/a571943317c536941223f6847b2cff2535f6f8d1b34c49ce598d8fdcae0573ac.jpg.webp"
+    },
+    {id: 3,
+    name: "Смартфон 3",
+    price: "151000",
+    rating: 4,
+    description: "Это просто описание смартфона с номером 3",
+    image: "https://c.dns-shop.ru/thumb/st4/fit/200/200/f3c07e9d8dd6a9de9e0e28ccb83f115b/9567d18107af5c3d1264b429db988c4bc63a8089d4cb76add0236817adeb3af8.jpg.webp"
+    },
+    {id: 4,
+    name: "Смартфон 4",
+    price: "152000",
+    rating: 1,
+    description: "Это просто описание смартфона с номером 3",
+    image: "https://c.dns-shop.ru/thumb/st4/fit/320/250/145ea547ae4e7e7b4ffa7f57915204f1/bd65317a2d3cf14bd2b3d6e1aee797491777d5b5467d2ab774a5bdcbc71c5c95.jpg"
+    }
+  ];
+
+  const indexOfLastProduct = currentPage * productsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  const currentProducts = products.slice(indexOfFirstProduct, indexOfLastProduct);
+  const totalPages = Math.ceil(products.length / productsPerPage);
+  const nextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+      window.scrollTo(0,0);
+    }
+  };
+  const prevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+      window.scrollTo(0,0);
+    }
+  };
+
+  const goToPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(1);
+      window.scrollTo(0,0);
+    }
+  };
+
+  return (
+  <div>
+    <section className="product-gallery">
+      <h2>Все товары</h2>
+      
+      <div className="products-grid">
+        {currentProducts.map((product) => (
+          <Link to={`/product/${product.id}`} className="product-link" key={product.id}>
+            <ProductCard product={product} />
+          </Link>
+        ))}
+      </div>
+
+      {/*Пагинация*/}
+      <div className="pagination">
+        <button
+          onClick={prevPage}
+          disabled={currentPage === 1}
+          className="pagination-button"
+        >
+          <FaChevronLeft/>
+        </button>
+        
+        {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNumber) => (
+          <button
+            key={pageNumber}
+            onClick={() => goToPage(pageNumber)}
+            className={`pagination-button ${currentPage === pageNumber ? 'active' : ''}`}
+          >
+            {pageNumber}
+          </button>
+        ))}
+        
+        <button
+          onClick={nextPage}
+          disabled={currentPage === totalPages}
+          className="pagination-button"
+        >
+          <FaChevronRight/>
+        </button>
+      </div>
+    </section>
+  </div>
+);
+}
+
+//Компонент с карточкой товара
+const ProductCard = ({ product }) => {
+  const [isHovered, setIsHovered] = useState(false);
+  
+  return (
+    <motion.div
+      className="product-card"
+      whileHover={{ y: -5, boxShadow: "0 10px 20px rgba(211, 125, 125, 0.1)" }}
+      onHoverStart={() => setIsHovered(true)}
+      onHoverEnd={() => setIsHovered(false)}
+    >
+      <div className="product-image">
+        <img src={product.image} alt={product.name} />
+        {isHovered && (
+          <motion.div
+            className="quick-view"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+          >
+            Подробнее
+          </motion.div>
+        )}
+      </div>
+    </motion.div>
   );
 };
 
